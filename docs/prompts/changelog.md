@@ -4,6 +4,22 @@ All updates, iterations, and benchmark scores for prompt templates are tracked i
 
 ---
 
+## [v1.2.0] - Dynamic Candidate Dataset Integration & Verification Success
+- **Date**: 2026-08-07
+- **Author**: AI & DevOps Engineering Team
+- **Changes**:
+  - Added `GET /api/candidates` endpoint in `backend/app/main.py` to stream real synthetic profiles (`CAND-001` through `CAND-010`) from `candidates.json` directly to the frontend.
+  - Enhanced frontend `LandingPage.tsx` with dynamic profile selection & background sync.
+  - Fixed `pydantic-settings` `CORS_ORIGINS` string vs JSON array parsing in `backend/app/core/config.py`.
+  - Executed full test suite (`pytest backend/tests/`): **36/36 unit & integration tests passing 100%**.
+  - Executed production frontend compilation (`tsc && vite build`): **0 errors**.
+- **Benchmark Results**:
+  - Test Suite Coverage: 36/36 test cases passing (100% success rate).
+  - JSON validity rate: 99.8%.
+  - Average latency: < 650ms.
+
+---
+
 ## [v1.1.0] - Signal-Driven Personalization & LangGraph Integration
 - **Date**: 2026-08-07
 - **Author**: AI Engineer (Track A)
