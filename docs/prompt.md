@@ -11,7 +11,8 @@ This document serves as the single source of truth for all prompts implemented b
 3. [Prompt 03 — Answer Evaluation & Depth Scoring](#3-prompt-03--answer-evaluation--depth-scoring)
 4. [Prompt 04 — Targeted Follow-Up Probing](#4-prompt-04--targeted-follow-up-probing)
 5. [Prompt 05 — Comprehensive Feedback Synthesis](#5-prompt-05--comprehensive-feedback-synthesis)
-6. [Team Contribution Template for New Prompts](#-team-contribution-template-for-new-prompts)
+6. [Prompt 06 — Frontend UI Implementation & Design System Guidelines](#6-prompt-06--frontend-ui-implementation--design-system-guidelines)
+7. [Team Contribution Template for New Prompts](#-team-contribution-template-for-new-prompts)
 
 ---
 
@@ -251,6 +252,181 @@ Instructions:
 
 ---
 
+## 6. Prompt 06 — Frontend UI Implementation & Design System Guidelines
+
+- **Phase**: `FRONTEND_UI` / `DESIGN_SYSTEM`
+- **Implemented By**: Frontend Lead / Product
+- **Target Platform**: React + TypeScript (Vite) + Vanilla CSS (No CSS Frameworks)
+- **Scope**: Single source of truth for all frontend architecture, styling tokens, workflow order, and component design rules.
+
+### 📥 Input Variables
+- `existing_project_structure`: Established repository layout without modifying folder names or architecture.
+- `design_tokens`:
+  - `Background`: `#FAFAF9`
+  - `Cards`: `#FFFFFF`
+  - `Primary`: `#2F855A`
+  - `Accent`: `#1F2937`
+  - `Rounded Corners`: `16px`
+  - `Shadow`: Soft
+  - `Spacing`: Large
+- `scope_restrictions`: Strict exclusion of auth, login/signup, accounts, dark mode, voice, charts, notifications, and settings.
+- `page_sequence`: 1. Landing Page $\rightarrow$ 2. Interview Page $\rightarrow$ 3. Feedback Page.
+
+### 📝 Prompt Given
+```markdown
+# Additional Rules
+
+## Existing Project
+
+The project structure is already created.
+
+**Do NOT**
+
+* Generate a new folder structure.
+* Modify the existing project architecture.
+* Rename existing folders or files.
+* Create unnecessary files.
+
+Only create or update files that are required for implementing the UI.
+
+---
+
+## Project Context
+
+This prompt will be stored inside `prompt.md`.
+
+Treat this file as the single source of truth for frontend implementation.
+
+Always follow the instructions defined in this document throughout development.
+
+Do not ignore or overwrite these rules.
+
+---
+
+## Implementation Rules
+
+* Build the UI incrementally.
+* Complete one page before moving to the next.
+* Reuse components whenever possible.
+* Prefer composition over duplication.
+* Keep the code modular and maintainable.
+* Write production-quality React and TypeScript code.
+* Use functional components only.
+* Keep components focused on a single responsibility.
+
+---
+
+## Styling Rules
+
+* Use only Vanilla CSS.
+* Do not introduce Tailwind CSS or any CSS framework.
+* Use CSS variables for all colors, spacing, shadows, typography, and border radius.
+* Reuse existing utility classes whenever possible.
+* Avoid inline styles unless absolutely necessary.
+
+---
+
+## Design Rules
+
+Follow this design system consistently.
+
+Background : #FAFAF9
+
+Cards : #FFFFFF
+
+Primary : #2F855A
+
+Accent : #1F2937
+
+Rounded Corners : 16px
+
+Shadow : Soft
+
+Spacing : Large
+
+The interface should feel:
+
+* Professional
+* Minimal
+* Modern
+* Calm
+* Premium
+* Distraction-free
+
+Do not use gradients, glassmorphism, neon effects, or overly decorative elements.
+
+---
+
+## Scope Restrictions
+
+Do not implement features outside the project requirements.
+
+The following are out of scope:
+
+* User Authentication
+* Login / Signup
+* User Accounts
+* Profile Management
+* Persistent Conversation History
+* Voice Interaction
+* Notifications
+* Settings
+* Admin Dashboard
+* Mobile Application
+* Analytics Dashboard
+* Dark Mode
+* Charts (unless explicitly requested)
+
+---
+
+## Code Quality
+
+* Use strict TypeScript typing.
+* Write clean, readable code.
+* Avoid unnecessary abstractions.
+* Keep files small and maintainable.
+* Use meaningful variable and component names.
+* Handle loading, empty, and error states where appropriate.
+* Write code that is easy to extend in future iterations.
+
+---
+
+## Development Workflow
+
+Implement the project in this order:
+
+1. Landing Page
+2. Interview Page
+3. Feedback Page
+
+Do not jump ahead unless the current page is complete.
+
+After completing each page:
+
+* Ensure the UI is responsive.
+* Verify visual consistency with the design system.
+* Reuse existing components before creating new ones.
+* Keep the implementation aligned with the existing project architecture.
+
+---
+
+## Final Goal
+
+The objective is not to produce a flashy Dribbble-style design.
+
+The objective is to build a clean, scalable, production-ready frontend foundation that can later be refined with improved visuals, animations, and interactions.
+```
+
+### 📤 Summarized Output Contract
+- **Output Format**: Production-ready React + TypeScript frontend codebase adhering to standard Vanilla CSS tokens and functional component hierarchy.
+- **Implemented Output Artifacts**:
+  - `frontend/src/styles/index.css`: Vanilla CSS custom properties (`--color-bg: #FAFAF9`, `--color-card: #FFFFFF`, `--color-primary: #2F855A`, `--color-accent: #1F2937`, `--radius-lg: 16px`, `--shadow-soft`, `--shadow-card`, large consistent spacing tokens).
+  - `frontend/src/components/LandingPage.tsx`: Minimal, calm candidate profile selection and technical interview initialization interface.
+  - `frontend/src/App.tsx`: Incremental page state controller managing transitions across `landing`, `interview`, and `feedback` states with strict error and loading handling.
+  - Strict TypeScript type safety verified via `tsc && vite build`.
+
+---
+
 ## ➕ Team Contribution Template for New Prompts
 
 When any team member creates or updates a prompt, append a new entry using this standard schema:
@@ -258,10 +434,10 @@ When any team member creates or updates a prompt, append a new entry using this 
 ```markdown
 ## [Prompt ID] — [Prompt Title]
 
-- **Phase**: `[INTRO | ASKING | EVALUATE | FOLLOWUP | CLOSING | FEEDBACK | CUSTOM]`
+- **Phase**: `[INTRO | ASKING | EVALUATE | FOLLOWUP | CLOSING | FEEDBACK | FRONTEND_UI | CUSTOM]`
 - **Implemented By**: `[Team Member Name / Track]`
-- **Target Model**: `[e.g., Claude 3.5 Sonnet / GPT-4o / Groq LLaMA 3.3]`
-- **Temperature**: `[0.0 - 1.0]`
+- **Target Model / Platform**: `[e.g., Claude 3.5 Sonnet / GPT-4o / React TypeScript]`
+- **Temperature / Config**: `[0.0 - 1.0 / N/A]`
 
 ### 📥 Input Variables
 - `var_name` (`type`): Description.
@@ -272,7 +448,7 @@ When any team member creates or updates a prompt, append a new entry using this 
 ```
 
 ### 📤 Summarized Output Contract
-- **Output Format**: `[Plain Text | JSON | Markdown]`
+- **Output Format**: `[Plain Text | JSON | Markdown | Code]`
 - **Sample Output**:
 ```json
 [Paste expected output sample here]
