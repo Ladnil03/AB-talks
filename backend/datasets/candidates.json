@@ -1,0 +1,26 @@
+[
+  {
+    "id": "cand_001",
+    "name": "Sarah Chen",
+    "track": "Senior Backend Engineer",
+    "background": "5 years Python & Go building high-throughput payment gateways",
+    "missions": [
+      { "day": 1, "passed": true, "attempts": 1, "missionsFirstTry": 4 },
+      { "day": 2, "passed": false, "attempts": 5, "missionsFirstTry": 1 },
+      { "day": 3, "passed": true, "attempts": 2, "missionsFirstTry": 3 },
+      { "day": 4, "passed": true, "attempts": 1, "missionsFirstTry": 4 }
+    ]
+  },
+  {
+    "id": "cand_002",
+    "name": "Marcus Rodriguez",
+    "track": "Staff Full Stack Engineer",
+    "background": "8 years enterprise web applications, real-time analytics platforms",
+    "missions": [
+      { "day": 1, "passed": true, "attempts": 2, "missionsFirstTry": 3 },
+      { "day": 2, "passed": true, "attempts": 1, "missionsFirstTry": 5 },
+      { "day": 3, "passed": false, "attempts": 4, "missionsFirstTry": 0 },
+      { "day": 4, "passed": true, "attempts": 3, "missionsFirstTry": 2 }
+    ]
+  }
+]
