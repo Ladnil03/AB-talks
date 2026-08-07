@@ -1,10 +1,12 @@
 # Team Engineering Workflow & Collaboration Agreement
 
-## 1. Branching Strategy
-All three team members work on dedicated feature branches branched off `main`:
-- **AI Engineer**: `feat/ai-day-planner`, `feat/ai-langgraph`, `feat/ai-prompts`
-- **Backend Engineer**: `feat/be-fastapi-contract`, `feat/be-session-store`, `feat/be-loaders`
-- **DevOps Engineer**: `feat/devops-docker`, `feat/devops-ci`, `feat/devops-observability`
+## 1. Branching Strategy & Role Tracks
+All team members work on dedicated feature branches branched off `main`:
+- **Frontend & DevOps Engineer (Lead)**:
+  - Frontend: `feat/fe-interview-room`, `feat/fe-feedback-card`, `feat/fe-api-client`
+  - DevOps & Infra: `feat/devops-docker`, `feat/devops-ci`, `feat/devops-observability`
+- **AI Engineer (Track A)**: `feat/ai-day-planner`, `feat/ai-langgraph`, `feat/ai-prompts`
+- **Backend Engineer (Track B)**: `feat/be-fastapi-contract`, `feat/be-session-store`, `feat/be-loaders`
 
 ---
 

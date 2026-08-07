@@ -1,5 +1,6 @@
 # AI Interview Agent — Frontend Application
 
+**Lead / Owner:** Frontend & DevOps Engineer  
 Modern React & TypeScript web client for the AI Technical Interviewer platform.
 
 ---

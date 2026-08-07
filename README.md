@@ -29,11 +29,11 @@ AB_talks/
 
 ## 👥 3-Person Team Ownership & Tracks
 
-| Role / Track | Directory | Responsibilities |
+| Role / Track | Directory & Workspace | Responsibilities |
 |---|---|---|
-| **AI Engineer** (Track A) | [`team/ai_engineer/`](file:///d:/Project/AB_talks/team/ai_engineer/) & [`backend/app/graph/`](file:///d:/Project/AB_talks/backend/app/graph/) | LangGraph state flow, prompt templates, day planner logic, LLM client abstraction, feedback synthesis. |
-| **Backend Engineer** (Track B) | [`team/backend_engineer/`](file:///d:/Project/AB_talks/team/backend_engineer/) & [`backend/app/`](file:///d:/Project/AB_talks/backend/app/) | FastAPI REST endpoints (`POST /api/interview`), Pydantic models, session management, data loaders, contract tests. |
-| **DevOps Engineer** (Track C) | [`team/devops_engineer/`](file:///d:/Project/AB_talks/team/devops_engineer/) & [`.github/`](file:///d:/Project/AB_talks/.github/) | Docker containers, CI pipeline, cloud deployment, structured logging, health checks, load testing. |
+| **Frontend & DevOps Engineer** *(Your Role)* | [`frontend/`](file:///d:/Project/AB_talks/frontend/), [`team/devops_engineer/`](file:///d:/Project/AB_talks/team/devops_engineer/) & [`.github/`](file:///d:/Project/AB_talks/.github/) | Modern React UI, design system, API integration, containerization (Docker & Compose), CI/CD automation, cloud deployment, logging/observability, and load testing. |
+| **AI / Prompt Engineer** *(Track A)* | [`team/ai_engineer/`](file:///d:/Project/AB_talks/team/ai_engineer/) & [`backend/app/graph/`](file:///d:/Project/AB_talks/backend/app/graph/) | LangGraph state flow, prompt templates, day planner personalization logic, LLM client abstraction, answer evaluation, and feedback synthesis. |
+| **Backend Engineer** *(Track B)* | [`team/backend_engineer/`](file:///d:/Project/AB_talks/team/backend_engineer/) & [`backend/app/`](file:///d:/Project/AB_talks/backend/app/) | FastAPI REST endpoints (`POST /api/interview`), Pydantic v2 schemas, session store (in-memory/Redis), data loaders, and contract tests. |
 
 ---
 

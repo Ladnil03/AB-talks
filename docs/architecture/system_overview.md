@@ -34,3 +34,13 @@
 4. `FOLLOWUP`: Evaluates answer; if shallow and follow-up count < 2, probes further.
 5. `CLOSING`: Concludes interview after reaching ≥8 questions across ≥4 days.
 6. `DONE`: Emits final structured feedback payload.
+
+---
+
+## 3. Engineering Tracks & Architectural Ownership
+
+- **Frontend & DevOps Engineer (Lead)**:
+  - **Frontend Client (`frontend/`)**: React 18 + TypeScript SPA, interview state orchestration, responsive dark-mode design system, live transcript feed, and structured feedback card renderers.
+  - **Infrastructure & DevOps (`team/devops_engineer/`, `.github/`)**: Docker container multi-stage builds, Docker Compose service orchestration, GitHub Actions CI testing pipeline, deployment runbooks, and `/health` observability probes.
+- **AI Engineer (Track A)**: LangGraph state transitions, day planner scoring algorithms, LLM abstraction, prompt engineering, and feedback synthesis.
+- **Backend Engineer (Track B)**: FastAPI routes (`POST /api/interview`), Pydantic v2 validation contracts, session store adapters, dataset loaders, and contract test suites.

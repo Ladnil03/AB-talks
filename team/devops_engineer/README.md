@@ -1,7 +1,7 @@
-# Track C — DevOps Engineer Workspace
+# Frontend & DevOps Engineer Workspace
 
-**Owner:** DevOps Engineer  
-**Scope:** Containerization, CI/CD pipeline, environment configurations, deployment automation, structured logging, and observability.
+**Owner:** Frontend & DevOps Engineer (Lead)  
+**Scope:** Frontend web application ([`frontend/`](file:///d:/Project/AB_talks/frontend/)), UI components, state management, API integration, containerization, CI/CD pipeline, environment configurations, deployment automation, and observability.
 
 ---
 
