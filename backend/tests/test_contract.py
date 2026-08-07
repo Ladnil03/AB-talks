@@ -1,5 +1,6 @@
 """Contract tests validating request and response schemas for FastAPI endpoints."""
 from fastapi.testclient import TestClient
+
 from app.main import app
 
 client = TestClient(app)
