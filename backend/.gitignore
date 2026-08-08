@@ -1,0 +1,72 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Virtual Environments
+env/
+venv/
+.venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Environment Variables & Secrets
+.env
+.env.*
+*.env
+*.pem
+*.key
+*.cer
+*.crt
+*.pfx
+*.p12
+*.pub
+*secret*
+*secrets*
+*credentials*
+service-account*.json
+serviceAccountKey*.json
+
+# Packaging, Builds & Tests
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.mypy_cache/
+.ruff_cache/
+
+# Databases, Vector Stores & Local Cache
+*.sqlite
+*.sqlite3
+*.db
+*.db3
+chroma_db/
+.chroma/
+vector_db/
+sessions/
+session.json
+.cache/
+hf_cache/
+
+# Logs & Temporary Files
+logs/
+*.log
+*.tmp

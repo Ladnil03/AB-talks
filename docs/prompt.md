@@ -146,17 +146,110 @@ Instructions:
 
 ## 🛠️ Backend Engineer (Track B)
 
-Add prompt entries here for API contracts, response shaping, error handling, or any LLM usage owned by the backend (e.g. `backend/app/main.py`, `backend/app/schemas.py`).
+Owns the FastAPI server, Pydantic schemas, LangGraph state machine flow, curriculum dataset loaders, session persistence, and LLM evaluation prompts.
 
-*None registered yet.*
+### 07 — Backend & State Machine Master Specification Prompt · `backend/app/`
+- **Inputs**: Curriculum dataset (`datasets/curriculum.json`), candidate profiles (`datasets/candidates.json`), multi-turn HTTP payloads (`InterviewRequest`).
+- **Output**: FastAPI application, Pydantic schemas, LangGraph state machine, in-memory session store, LLM client.
+
+```markdown
+You are a Principal Backend & AI Systems Architect. Build a production-ready Python FastAPI backend for an Autonomous AI Technical Interviewer platform ("Dayflow AI Interviewer").
+
+The backend orchestrates an experience-grounded, multi-turn technical interview using a compiled LangGraph state machine, in-memory session persistence, curriculum dataset grounding, and structured Pydantic response schemas.
+
+1. SYSTEM ARCHITECTURE & FASTAPI APPLICATION
+- Framework: FastAPI with async context manager lifespan hook loading synthetic dataset schemas on startup.
+- CORS Middleware: Enable cross-origin requests for local frontend origins (http://localhost:5173).
+- Endpoints:
+  - GET /health: Health probe returning {"status": "healthy", "service": "interview-agent-backend"}.
+  - GET /api/candidates: Returns synthetic candidate profiles with id, name, track, background.
+  - POST /api/interview: Main turn execution handler accepting InterviewRequest (sessionId, candidate, message) and returning InterviewResponse (reply, done, feedback).
+
+2. STATE MACHINE ENGINE (LANGGRAPH & STATE)
+- State Schema (InterviewState TypedDict):
+  - session_id: str, candidate_id: str, candidate_name: str, day_plan: list[int], current_day_index: int
+  - follow_ups_on_current_day: int, questions_asked: int, days_covered: set[int], transcript: list[dict]
+  - phase: Literal["INTRO", "ASKING", "AWAIT_ANSWER", "FOLLOWUP", "CLOSING", "DONE"]
+  - feedback: dict | None, last_reply: str | None
+- Graph Nodes & Edges:
+  - StateGraph(InterviewState) with nodes: intro -> ask_question -> evaluate_answer -> ask_followup / synthesize_feedback.
+  - Pausing with interrupt() after each generated question/followup; resumed via Command(resume=incoming_message) using MemorySaver checkpointer keyed by thread_id == session_id.
+- Dynamic Signal Profiling:
+  - Select candidate signal framing ("skipped", "weak", "stretch", "standard") based on candidate cohort mission history (attempts, skipped flags, first-try rates).
+
+3. IN-MEMORY SESSION STORE
+- Implement InMemorySessionStore providing thread-safe set(session_id, state), get(session_id), exists(session_id), delete(session_id).
+
+4. DATA & CURRICULUM LOADERS
+- DataLoader parsing synthetic candidates.json and curriculum.json.
+- Select 3-day curriculum anchor plan (select_day_plan) matching candidate track/experience.
+
+5. DATA MODELS & SCHEMAS (PYDANTIC)
+- CandidateProfile(id, name, track, background)
+- InterviewRequest(sessionId, candidate, message)
+- InterviewResponse(reply, done, feedback)
+- FeedbackSchema(summary, strengths, gaps, next)
+```
+- **Sample**: *"FastAPI backend orchestrating LangGraph state machine for multi-turn AI interview turns"*
 
 ---
 
-## 🚀 DevOps Engineer (Track C)
+## 🎨 Frontend Engineer (Track UI / UX)
 
-Add prompt entries here for deployment, observability, health checks, or any LLM usage owned by the DevOps track.
+Owns the React + TypeScript user interface, responsive glassmorphic design system, telemetry sidebar, interactive candidate hub, and printable PDF evaluation export.
 
-*None registered yet.*
+### 06 — Frontend Master Specification Prompt · `frontend/src/`
+- **Inputs**: Candidate profiles (`/api/candidates`), multi-turn responses (`/api/interview`)
+- **Output**: Full React 18 SPA codebase (App, LandingPage, InterviewRoom, FeedbackCard, index.css)
+```markdown
+You are an expert Frontend Architect. Build a modern, light, highly professional React + TypeScript web application for an Autonomous AI Technical Interviewer platform called "Dayflow AI Interviewer". 
+
+The platform allows engineering leaders to select experience-grounded candidate profiles, conduct adaptive multi-turn technical assessments probing architectural trade-offs, and generate executive feedback reports with one-click PDF export capabilities.
+
+1. DESIGN SYSTEM & TYPOGRAPHY
+- Aesthetics: Crisp, corporate light mode theme (Slate #F8FAFC base, #FFFFFF card surfaces, #E2E8F0 borders, Slate #0F172A primary text, Slate #475569 body text).
+- Accents: Royal Blue (#2563EB) & Indigo (#4F46E5) gradient buttons and active elements. Success Emerald (#16A34A) and Warning Amber (#D97706) status pills.
+- Typography: Import Google Fonts:
+  - Headings & Buttons: 'Plus Jakarta Sans', sans-serif
+  - Body Text: 'DM Sans', sans-serif
+  - Technical Snippets & Telemetry: 'JetBrains Mono', monospace
+- Micro-interactions: Include keyframes for smooth fade-ins, pulsing online indicators (@keyframes pulse-online), message entry animations (@keyframes messageAppear), and an animated typing thinking indicator (@keyframes typingBounce).
+
+2. CORE COMPONENT ARCHITECTURE & VIEWS
+
+A. Universal Header & Navigation
+- Universal sticky navbar with brand logo (Bot icon), app title "Dayflow AI Interviewer", tagline, active session status pill, and "Back to Home" button.
+
+B. Interactive Home Page (Landing Hub)
+- Hero Banner: Version badge ("Dayflow Engine v1.0"), headline ("Grounded Technical Evaluation for Engineering Teams"), subtitle, and dual CTA buttons ("Select Candidate Profile" with smooth scroll, and "How Platform Works").
+- Platform Metrics Banner: 3 stat cards ("3-Day Scenario Curriculum", "Multi-Turn Follow-up Probing", "100% Experience Grounded").
+- Candidate Assessment Center:
+  - Search input with live name/skill filtering.
+  - Category filter tabs ("All Tracks", "Data Engineering", "Backend & Systems", "AI & ML Engineering").
+  - Candidate profile selection cards with avatar initials, track tags, role experience summary, and radio selection state.
+  - Candidate Inspection Drawer displaying target assessment plan for the selected candidate.
+- How It Works Stepper: 3 numbered step cards (01. Profile Grounding, 02. Multi-Turn Evaluation, 03. Performance Synthesis).
+- Features Grid & Bottom Launch CTA Banner.
+
+C. Telemetry-Enabled Interview Room
+- Two-Column Layout:
+  - Left Telemetry Sidebar: Candidate summary card, 3-stage progress tracker (Intro → Scenario → Synthesis), and Quick Response Ideas chips for single-click prompt insertion.
+  - Main Chat Window: Glassmorphic chat stream with role avatars (Bot & User), timestamps, dark code syntax blocks (pre/code), auto-scroll to bottom, typing indicator when awaiting AI responses, and text input bar with Enter keyboard shortcut.
+
+D. Executive Feedback & Performance Synthesis
+- Executive summary card with high-level evaluation narrative.
+- Categorized cards grid: Demonstrated Strengths (Emerald icons), Identified Technical Gaps (Amber warning icons), and Recommended Growth & Action Plan (Indigo action items).
+- Print / Export PDF Report button (Printer icon) triggering window.print().
+- Printable PDF Letterhead Header with company logo, assessment date, candidate name, track, and candidate ID.
+- Dedicated @media print CSS hiding web chrome, configuring A4 page margins, and preventing mid-card page breaks.
+
+3. TECH STACK & INTEGRATION
+- React 18, TypeScript, Vite, lucide-react icons.
+- API Endpoints:
+  - GET /api/candidates
+  - POST /api/interview (accepting sessionId, candidate, message; returning reply, done, feedback)
+```
+- **Sample**: *"Interactive Dayflow AI Frontend with Candidate Hub, Telemetry Sidebar, and PDF Export Report"*
 
 ---
 
@@ -173,3 +266,37 @@ Append a new entry under your track's section:
 ```
 - **Sample**: *short example output*
 ````
+
+---
+
+## 🧹 Maintenance & Build Fixes
+
+### TypeScript Unused Declarations Cleanup (`TS6133`)
+
+#### Prompt
+```markdown
+I'm getting the following TypeScript build errors when running `npm run build` (tsc + vite build) in my React frontend project. These are all "declared but never read" (TS6133) unused import/variable errors — no logic or styling errors.
+
+Error output:
+src/App.tsx:2:28 - error TS6133: 'Sparkles' is declared but its value is never read.
+src/App.tsx:2:38 - error TS6133: 'FastForward' is declared but its value is never read.
+src/components/CandidateSelectionPage.tsx:9:3 - error TS6133: 'Home' is declared but its value is never read.
+src/components/CandidateSelectionPage.tsx:31:3 - error TS6133: 'error' is declared but its value is never read.
+src/components/LandingPage.tsx:3:3 - error TS6133: 'Bot' is declared but its value is never read.
+src/components/LandingPage.tsx:10:3 - error TS6133: 'Zap' is declared but its value is never read.
+src/data/demoTranscript.ts:1:10 - error TS6133: 'ChatMessage' is declared but its value is never read.
+
+Please fix these by:
+1. Removing only the specific unused imports/variables listed above from each file.
+2. Do NOT remove any import or variable that IS actually used elsewhere in the file — first check usage before deleting.
+3. Do NOT change any JSX, component logic, styling, class names, layout, or design in any of these files — only touch the import statements / unused variable declarations causing these exact errors.
+4. For the unused 'error' variable in CandidateSelectionPage.tsx line 31, check its context (destructuring, catch block, etc.) and either remove it cleanly or prefix it with an underscore if it needs to stay for type/structure reasons — pick whichever keeps the code cleanest without breaking functionality.
+5. After fixing, confirm each file still compiles cleanly and the unused-import errors are fully resolved without introducing new ones.
+```
+
+#### Output Summary
+- **[src/App.tsx](file:///d:/Project/AB_talks/frontend/src/App.tsx)**: Removed unused `Sparkles` and `FastForward` from `lucide-react` imports while keeping `Bot`, `Home`, and `Users`.
+- **[src/components/CandidateSelectionPage.tsx](file:///d:/Project/AB_talks/frontend/src/components/CandidateSelectionPage.tsx)**: Removed unused `Home` icon from `lucide-react` imports and removed unused `error` parameter from component props destructuring cleanly while preserving `CandidateSelectionPageProps` interface.
+- **[src/components/LandingPage.tsx](file:///d:/Project/AB_talks/frontend/src/components/LandingPage.tsx)**: Removed unused `Bot` and `Zap` icons from `lucide-react` imports while keeping all other icons in use.
+- **[src/data/demoTranscript.ts](file:///d:/Project/AB_talks/frontend/src/data/demoTranscript.ts)**: Removed unused `ChatMessage` type import from `../types/interview` while preserving `FeedbackSchema` and `CandidateProfile`.
+- **Build Verification**: Ran `npm run build` (`tsc && vite build`) with 0 errors, validating all TypeScript checks and successfully producing the production bundle.

@@ -42,6 +42,22 @@ def health_check():
     return {"status": "healthy", "service": "interview-agent-backend"}
 
 
+@app.get("/api/candidates")
+def list_candidates():
+    """Returns candidate profiles loaded from synthetic candidates.json."""
+    candidates_list = []
+    for cand_id, cand_data in data_loader.candidates.items():
+        member = cand_data.get("member", {})
+        candidates_list.append({
+            "id": member.get("id", cand_id),
+            "name": member.get("name", "Cohort Learner"),
+            "track": member.get("jobRole", "AI Engineer"),
+            "background": f"{member.get('yearsExperience', 0)} years exp, {member.get('education', '')}".strip(", ")
+        })
+    return candidates_list
+
+
+
 @app.post("/api/interview", response_model=InterviewResponse)
 def handle_interview(req: InterviewRequest):
     """Main interview endpoint: handles session init and conversation turns."""
@@ -78,7 +94,7 @@ def handle_interview(req: InterviewRequest):
         session_store.set(session_id, updated_state)
 
         return InterviewResponse(
-            reply=updated_state.get("last_reply", "Welcome to your technical interview."),
+            reply=updated_state.get("last_reply") or "Welcome to your technical interview.",
             done=False,
             feedback=None,
         )
@@ -100,7 +116,7 @@ def handle_interview(req: InterviewRequest):
     feedback_obj = FeedbackSchema(**feedback_data) if feedback_data else None
 
     return InterviewResponse(
-        reply=updated_state.get("last_reply", "Thank you."),
+        reply=updated_state.get("last_reply") or "Thank you.",
         done=is_done,
         feedback=feedback_obj,
     )
