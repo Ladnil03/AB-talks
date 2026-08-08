@@ -22,6 +22,7 @@ export interface InterviewResponse {
   reply: string;
   done: boolean;
   feedback?: FeedbackSchema | null;
+  questionsAsked?: number;
 }
 
 export interface ChatMessage {
@@ -29,4 +30,5 @@ export interface ChatMessage {
   role: 'agent' | 'candidate';
   content: string;
   timestamp: string;
+  questionNumber?: number;
 }

@@ -278,7 +278,7 @@ ${feedback.next.map((n) => `• ${n}`).join('\n')}
             type="button"
             className="btn-primary"
             onClick={handlePrintPdf}
-            style={{ background: 'linear-gradient(135deg, #0284c7, #2563eb)' }}
+            style={{ background: '#2563eb' }}
           >
             <Printer size={16} />
             <span>

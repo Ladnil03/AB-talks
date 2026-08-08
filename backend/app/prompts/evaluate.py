@@ -20,7 +20,7 @@ def build_evaluation_prompt(context: dict[str, Any]) -> str:
         f"{context.get('follow_up_count', 0)} (Hard max is 2)\n\n"
         "Evaluation Criteria:\n"
         '- DEPTH:\n'
-        '  - "SHALLOW": High-level keywords only, lacks concrete mechanism or trade-offs.\n'
+        '  - "SHALLOW": Generic, off-topic, random/irrelevant, or lacks concrete mechanism details.\n'
         '  - "MEDIUM": Explains the concept and basic implementation, but misses edge cases or failure modes.\n'
         '  - "DEEP": Comprehensive explanation including architecture, edge cases, trade-offs, and practical '
         "considerations.\n"

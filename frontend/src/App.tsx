@@ -1,18 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { Bot, Home, Users } from 'lucide-react';
+import { Bot, Home, Users, Info } from 'lucide-react';
 import { LandingPage, DEFAULT_CANDIDATES } from './components/LandingPage';
 import { CandidateSelectionPage } from './components/CandidateSelectionPage';
 import { InterviewRoom } from './components/InterviewRoom';
 import { FeedbackCard } from './components/FeedbackCard';
+import { AboutPage } from './components/AboutPage';
 import { sendInterviewTurn } from './services/api';
 import { ChatMessage, FeedbackSchema, CandidateProfile } from './types/interview';
-import { 
-  ALEX_TURNER_DEMO_TRANSCRIPT, 
-  DEMO_CANDIDATE_ALEX, 
-  DEMO_FEEDBACK_SYNTHESIS 
+import {
+  ALEX_TURNER_DEMO_TRANSCRIPT,
+  DEMO_CANDIDATE_ALEX,
+  DEMO_FEEDBACK_SYNTHESIS
 } from './data/demoTranscript';
 
-type PageState = 'home' | 'candidates' | 'interview' | 'feedback';
+type PageState = 'home' | 'candidates' | 'interview' | 'feedback' | 'about';
 
 export const App: React.FC = () => {
   const [currentPage, setCurrentPage] = useState<PageState>('home');
@@ -56,7 +57,7 @@ export const App: React.FC = () => {
 
       setMessages((prev) => [...prev, newMsgObj]);
       setDemoIndex((prev) => prev + 1);
-    }, 1800);
+    }, 2200);
 
     return () => clearTimeout(timer);
   }, [isDemoMode, isDemoPaused, demoIndex]);
@@ -116,7 +117,8 @@ export const App: React.FC = () => {
           id: `msg_${Date.now()}_agent`,
           role: 'agent',
           content: initResponse.reply,
-          timestamp: new Date().toISOString()
+          timestamp: new Date().toISOString(),
+          questionNumber: initResponse.questionsAsked ?? 1
         }
       ]);
 
@@ -129,7 +131,8 @@ export const App: React.FC = () => {
           id: `msg_${Date.now()}_agent`,
           role: 'agent',
           content: `Hello ${selectedCandidate.name}! Welcome to your technical assessment for the ${selectedCandidate.track || 'Engineering'} role. Today, we'll dive into real-world engineering trade-offs, architecture decisions, and system resilience. Let me start by asking: could you walk me through an architecture decision you made in your previous projects that you're most proud of?`,
-          timestamp: new Date().toISOString()
+          timestamp: new Date().toISOString(),
+          questionNumber: 1
         }
       ]);
       setCurrentPage('interview');
@@ -162,7 +165,8 @@ export const App: React.FC = () => {
         id: `msg_${Date.now()}_agent`,
         role: 'agent',
         content: response.reply,
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
+        questionNumber: response.questionsAsked
       };
 
       setMessages((prev) => [...prev, agentMessageObj]);
@@ -192,8 +196,8 @@ export const App: React.FC = () => {
     <div className="app-container">
       {/* Universal Header Navigation */}
       <header className="app-header">
-        <div 
-          className="brand-section" 
+        <div
+          className="brand-section"
           onClick={handleRestart}
           style={{ cursor: 'pointer' }}
           title="Return to Home"
@@ -209,9 +213,9 @@ export const App: React.FC = () => {
 
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem', flexWrap: 'wrap' }}>
           {currentPage !== 'home' && (
-            <button 
-              type="button" 
-              className="btn-secondary" 
+            <button
+              type="button"
+              className="btn-secondary"
               onClick={() => setCurrentPage('home')}
               style={{ padding: '0.45rem 1rem', fontSize: '0.85rem' }}
             >
@@ -221,9 +225,9 @@ export const App: React.FC = () => {
           )}
 
           {currentPage === 'home' && (
-            <button 
-              type="button" 
-              className="btn-secondary" 
+            <button
+              type="button"
+              className="btn-secondary"
               onClick={() => setCurrentPage('candidates')}
               style={{ padding: '0.45rem 1rem', fontSize: '0.85rem' }}
             >
@@ -232,12 +236,23 @@ export const App: React.FC = () => {
             </button>
           )}
 
+          <button
+            type="button"
+            className={`btn-secondary ${currentPage === 'about' ? 'active' : ''}`}
+            onClick={() => setCurrentPage('about')}
+            style={{ padding: '0.45rem 1rem', fontSize: '0.85rem' }}
+          >
+            <Info size={15} />
+            <span>About & Flow</span>
+          </button>
+
           <div className="header-status">
             <span className="status-dot" aria-hidden="true" />
             <span>
               {isDemoMode && `Playing Pitch Demo (${demoIndex}/${ALEX_TURNER_DEMO_TRANSCRIPT.length})`}
               {!isDemoMode && currentPage === 'home' && 'Ready for Assessment'}
               {!isDemoMode && currentPage === 'candidates' && 'Candidate Hub'}
+              {!isDemoMode && currentPage === 'about' && 'Architecture & Team'}
               {!isDemoMode && currentPage === 'interview' && `Candidate: ${selectedCandidate.name}`}
               {!isDemoMode && currentPage === 'feedback' && 'Evaluation Complete'}
             </span>
@@ -263,6 +278,13 @@ export const App: React.FC = () => {
             onGoHome={() => setCurrentPage('home')}
             isLoading={isLoading}
             error={errorMessage}
+          />
+        )}
+
+        {currentPage === 'about' && (
+          <AboutPage
+            onGoToCandidateHub={() => setCurrentPage('candidates')}
+            onLaunchDemo={handleStartDemo}
           />
         )}
 

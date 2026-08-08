@@ -97,6 +97,7 @@ def handle_interview(req: InterviewRequest):
             reply=updated_state.get("last_reply") or "Welcome to your technical interview.",
             done=False,
             feedback=None,
+            questionsAsked=updated_state.get("questions_asked", 0),
         )
 
     # 2. Existing Session Turn
@@ -119,4 +120,5 @@ def handle_interview(req: InterviewRequest):
         reply=updated_state.get("last_reply") or "Thank you.",
         done=is_done,
         feedback=feedback_obj,
+        questionsAsked=updated_state.get("questions_asked", 0),
     )

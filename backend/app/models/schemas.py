@@ -26,3 +26,4 @@ class InterviewResponse(BaseModel):
     reply: str = Field(..., description="Agent message or technical question to the candidate")
     done: bool = Field(False, description="Flag indicating if the interview has reached conclusion")
     feedback: Optional[FeedbackSchema] = Field(None, description="Final feedback synthesis when done=True")
+    questionsAsked: Optional[int] = Field(None, description="Number of primary scenario questions asked so far")
