@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { 
-  User, 
-  Bot, 
-  ArrowRight, 
-  Search, 
-  ShieldCheck, 
-  Zap, 
-  ArrowLeft 
+import {
+  User,
+  Bot,
+  ArrowRight,
+  Search,
+  ShieldCheck,
+  Zap,
+  ArrowLeft
 } from 'lucide-react';
 import { CandidateProfile } from '../types/interview';
 import { fetchCandidates } from '../services/api';
@@ -71,8 +71,8 @@ export const CandidateSelectionPage: React.FC<CandidateSelectionPageProps> = ({
     <div className="landing-view">
       {/* Top Breadcrumb Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
-        <button 
-          type="button" 
+        <button
+          type="button"
           className="btn-secondary"
           onClick={onGoHome}
           style={{ padding: '0.5rem 1rem', fontSize: '0.85rem' }}
@@ -102,8 +102,8 @@ export const CandidateSelectionPage: React.FC<CandidateSelectionPageProps> = ({
           {/* Search Box */}
           <div className="search-box">
             <Search size={16} style={{ color: 'var(--text-dim)' }} />
-            <input 
-              type="text" 
+            <input
+              type="text"
               placeholder="Filter by name or skills..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
@@ -114,28 +114,28 @@ export const CandidateSelectionPage: React.FC<CandidateSelectionPageProps> = ({
 
         {/* Filter Category Tabs */}
         <div className="filter-tabs-row">
-          <button 
+          <button
             type="button"
             className={`filter-tab ${activeTab === 'all' ? 'active' : ''}`}
             onClick={() => setActiveTab('all')}
           >
             All Candidates ({candidatesList.length})
           </button>
-          <button 
+          <button
             type="button"
             className={`filter-tab ${activeTab === 'data' ? 'active' : ''}`}
             onClick={() => setActiveTab('data')}
           >
             Data Engineering
           </button>
-          <button 
+          <button
             type="button"
             className={`filter-tab ${activeTab === 'backend' ? 'active' : ''}`}
             onClick={() => setActiveTab('backend')}
           >
             Backend & Systems
           </button>
-          <button 
+          <button
             type="button"
             className={`filter-tab ${activeTab === 'ai' ? 'active' : ''}`}
             onClick={() => setActiveTab('ai')}
@@ -201,7 +201,7 @@ export const CandidateSelectionPage: React.FC<CandidateSelectionPageProps> = ({
             </div>
 
             <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)' }}>
-              Curriculum anchors automatically configured for <strong>{selectedCandidate.name}</strong>. 
+              Curriculum anchors automatically configured for <strong>{selectedCandidate.name}</strong>.
               The interview will evaluate architectural trade-offs, concurrency, and system resilience grounded in their background.
             </p>
           </div>
