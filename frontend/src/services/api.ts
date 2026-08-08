@@ -1,6 +1,16 @@
 import { CandidateProfile, InterviewRequest, InterviewResponse } from '../types/interview';
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+/**
+ * Centralized API Base URL configuration.
+ * Reads `VITE_API_BASE_URL` at Vite build/runtime. Normalizes trailing slashes and trims whitespace.
+ * Falls back to 'http://localhost:8000' strictly for local dev when the env var is undefined.
+ */
+const rawBaseUrl = import.meta.env.VITE_API_BASE_URL;
+export const API_BASE_URL: string = (
+  typeof rawBaseUrl === 'string' && rawBaseUrl.trim() !== ''
+    ? rawBaseUrl.trim().replace(/\/+$/, '')
+    : 'http://localhost:8000'
+);
 
 export async function fetchCandidates(): Promise<CandidateProfile[]> {
   try {
@@ -8,7 +18,7 @@ export async function fetchCandidates(): Promise<CandidateProfile[]> {
     if (!response.ok) return [];
     return await response.json();
   } catch (err) {
-    console.warn('Could not fetch candidates from backend, falling back to defaults:', err);
+    console.warn(`Could not fetch candidates from backend at ${API_BASE_URL}, falling back to defaults:`, err);
     return [];
   }
 }
