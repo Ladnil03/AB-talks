@@ -172,8 +172,18 @@ def node_evaluate_answer(state: InterviewState) -> dict[str, Any]:
     )
     if not isinstance(eval_result, dict) or eval_result.get("depth") not in ("SHALLOW", "MEDIUM", "DEEP"):
         eval_result = mock_evaluate(context)
-    if not isinstance(eval_result.get("should_follow_up"), bool):
-        eval_result["should_follow_up"] = eval_result.get("depth") in ("SHALLOW", "MEDIUM")
+
+    follow_ups = state.get("follow_ups_on_current_day", 0)
+    depth = str(eval_result.get("depth", "SHALLOW")).upper()
+    if depth not in ("SHALLOW", "MEDIUM", "DEEP"):
+        depth = "SHALLOW"
+    eval_result["depth"] = depth
+
+    if depth in ("SHALLOW", "MEDIUM") and follow_ups < MAX_FOLLOWUPS:
+        eval_result["should_follow_up"] = True
+    else:
+        eval_result["should_follow_up"] = False
+
     last["eval"] = eval_result
 
     questions_asked = state.get("questions_asked", 0)
@@ -186,8 +196,7 @@ def node_evaluate_answer(state: InterviewState) -> dict[str, Any]:
     if exit_condition:
         return {"phase": "CLOSING", "transcript": transcript}
 
-    follow_ups = state.get("follow_ups_on_current_day", 0)
-    if eval_result.get("should_follow_up") and follow_ups < MAX_FOLLOWUPS:
+    if eval_result.get("should_follow_up"):
         return {"phase": "FOLLOWUP", "transcript": transcript}
 
     return {
@@ -215,6 +224,7 @@ def node_ask_followup(state: InterviewState) -> dict[str, Any]:
         "objectives": (day or {}).get("objectives", []),
         "day_no": day_no,
         "title": (day or {}).get("title", f"Day {day_no}"),
+        "follow_up_count": state.get("follow_ups_on_current_day", 0),
     }
     followup = _client().generate(build_followup_prompt(context), kind="followup", context=context)
     followup = followup or "Could you go a level deeper into the edge cases and failure modes there?"
@@ -228,7 +238,7 @@ def node_ask_followup(state: InterviewState) -> dict[str, Any]:
         "phase": "AWAIT_ANSWER",
         "last_reply": followup,
         "follow_ups_on_current_day": state.get("follow_ups_on_current_day", 0) + 1,
-        "questions_asked": state.get("questions_asked", 0) + 1,
+        "questions_asked": state.get("questions_asked", 0),
         "transcript": transcript,
     }
 

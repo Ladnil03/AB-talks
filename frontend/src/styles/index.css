@@ -2,22 +2,22 @@
    DAYFLOW AI INTERVIEWER - LIGHT & PROFESSIONAL DESIGN SYSTEM
    ========================================================================== */
 
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Fira+Code:wght@400;500&display=swap');
 
 :root {
   /* Clean Light Theme Colors */
   --bg-main: #f8fafc;
   --bg-secondary: #ffffff;
-  --glass-bg: rgba(255, 255, 255, 0.88);
-  --glass-bg-hover: rgba(248, 250, 252, 0.95);
+  --glass-bg: rgba(255, 255, 255, 0.95);
+  --glass-bg-hover: rgba(248, 250, 252, 0.98);
   --glass-card: #ffffff;
   --glass-border: #e2e8f0;
-  --glass-border-glow: rgba(37, 99, 235, 0.35);
+  --glass-border-glow: rgba(37, 99, 235, 0.2);
 
   /* Professional Corporate Accents */
   --accent-primary: #2563eb;
   --accent-primary-hover: #1d4ed8;
-  --accent-secondary: #4f46e5;
+  --accent-secondary: #3b82f6;
   --accent-cyan: #0284c7;
   --accent-emerald: #16a34a;
   --accent-amber: #d97706;
@@ -30,10 +30,10 @@
   --text-highlight: #1e293b;
 
   /* Elevation Shadows */
-  --glow-primary: 0 4px 20px rgba(37, 99, 235, 0.18);
-  --shadow-soft: 0 1px 3px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.03);
-  --shadow-card: 0 10px 25px -5px rgba(15, 23, 42, 0.08), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
-  --shadow-hover: 0 20px 30px -10px rgba(15, 23, 42, 0.12), 0 10px 15px -5px rgba(15, 23, 42, 0.06);
+  --glow-primary: 0 4px 12px rgba(37, 99, 235, 0.12);
+  --shadow-soft: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.02);
+  --shadow-card: 0 8px 20px -4px rgba(15, 23, 42, 0.06), 0 4px 8px -4px rgba(15, 23, 42, 0.03);
+  --shadow-hover: 0 12px 24px -6px rgba(15, 23, 42, 0.1), 0 6px 12px -4px rgba(15, 23, 42, 0.04);
 
   /* Radius */
   --radius-sm: 8px;
@@ -43,8 +43,8 @@
 
   /* Professional Fonts */
   --font-heading: 'Plus Jakarta Sans', -apple-system, sans-serif;
-  --font-body: 'DM Sans', -apple-system, sans-serif;
-  --font-mono: 'JetBrains Mono', monospace;
+  --font-body: 'Inter', -apple-system, sans-serif;
+  --font-mono: 'Fira Code', monospace;
 }
 
 html {
@@ -62,10 +62,6 @@ html {
 body {
   font-family: var(--font-body);
   background-color: var(--bg-main);
-  background-image: 
-    radial-gradient(circle at 10% 10%, rgba(37, 99, 235, 0.03) 0%, transparent 50%),
-    radial-gradient(circle at 90% 90%, rgba(79, 70, 229, 0.03) 0%, transparent 50%);
-  background-attachment: fixed;
   color: var(--text-main);
   min-height: 100vh;
   line-height: 1.6;
@@ -73,7 +69,9 @@ body {
 }
 
 /* Smooth Page Transitions */
-.landing-view, .interview-layout, .feedback-view {
+.landing-view,
+.interview-layout,
+.feedback-view {
   animation: pageSlideFade 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
@@ -82,6 +80,7 @@ body {
     opacity: 0;
     transform: translateY(12px) scale(0.995);
   }
+
   100% {
     opacity: 1;
     transform: translateY(0) scale(1);
@@ -93,13 +92,16 @@ body {
   width: 6px;
   height: 6px;
 }
+
 ::-webkit-scrollbar-track {
   background: #f1f5f9;
 }
+
 ::-webkit-scrollbar-thumb {
   background: #cbd5e1;
   border-radius: var(--radius-full);
 }
+
 ::-webkit-scrollbar-thumb:hover {
   background: #94a3b8;
 }
@@ -141,7 +143,7 @@ body {
 .brand-icon-wrapper {
   width: 44px;
   height: 44px;
-  background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+  background: var(--accent-primary);
   border-radius: var(--radius-md);
   display: flex;
   align-items: center;
@@ -186,8 +188,17 @@ body {
 }
 
 @keyframes pulse-online {
-  0%, 100% { transform: scale(1); opacity: 1; }
-  50% { transform: scale(1.2); opacity: 0.65; }
+
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+
+  50% {
+    transform: scale(1.2);
+    opacity: 0.65;
+  }
 }
 
 /* Landing Page Views */
@@ -530,7 +541,7 @@ body {
 
 .btn-primary {
   padding: 0.85rem 1.85rem;
-  background: linear-gradient(135deg, var(--accent-primary), var(--accent-primary-hover));
+  background: var(--accent-primary);
   color: #ffffff;
   border: none;
   border-radius: var(--radius-md);
@@ -541,14 +552,14 @@ body {
   display: inline-flex;
   align-items: center;
   gap: 0.6rem;
-  box-shadow: var(--glow-primary);
-  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: var(--shadow-soft);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .btn-primary:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(37, 99, 235, 0.3);
-  background: linear-gradient(135deg, #1d4ed8, #1e40af);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.25);
+  background: var(--accent-primary-hover);
 }
 
 .btn-primary:disabled {
@@ -678,7 +689,9 @@ body {
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* ==========================================================================
@@ -846,8 +859,15 @@ body {
 }
 
 @keyframes messageAppear {
-  from { opacity: 0; transform: translateY(8px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .chat-msg-row.agent {
@@ -872,9 +892,9 @@ body {
 }
 
 .chat-msg-row.agent .msg-avatar {
-  background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+  background: var(--accent-primary);
   color: #ffffff;
-  box-shadow: var(--glow-primary);
+  box-shadow: var(--shadow-soft);
 }
 
 .chat-msg-row.candidate .msg-avatar {
@@ -970,13 +990,31 @@ body {
   animation: typingBounce 1.4s infinite ease-in-out both;
 }
 
-.typing-dot:nth-child(1) { animation-delay: 0s; }
-.typing-dot:nth-child(2) { animation-delay: 0.2s; }
-.typing-dot:nth-child(3) { animation-delay: 0.4s; }
+.typing-dot:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.typing-dot:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.typing-dot:nth-child(3) {
+  animation-delay: 0.4s;
+}
 
 @keyframes typingBounce {
-  0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
-  40% { transform: scale(1.2); opacity: 1; }
+
+  0%,
+  80%,
+  100% {
+    transform: scale(0.6);
+    opacity: 0.4;
+  }
+
+  40% {
+    transform: scale(1.2);
+    opacity: 1;
+  }
 }
 
 /* Input Form Bar */
@@ -1015,7 +1053,7 @@ body {
 
 .send-btn {
   padding: 0.85rem 1.5rem;
-  background: linear-gradient(135deg, var(--accent-primary), var(--accent-primary-hover));
+  background: var(--accent-primary);
   color: #ffffff;
   border: none;
   border-radius: var(--radius-md);
@@ -1027,7 +1065,13 @@ body {
   align-items: center;
   gap: 0.5rem;
   transition: all 0.2s;
-  box-shadow: var(--glow-primary);
+  box-shadow: var(--shadow-soft);
+}
+
+.send-btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  background: var(--accent-primary-hover);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
 }
 
 .send-btn:hover:not(:disabled) {
@@ -1142,9 +1186,17 @@ body {
   font-size: 1.1rem;
 }
 
-.eval-box.strengths .eval-box-header { color: #16a34a; }
-.eval-box.gaps .eval-box-header { color: #d97706; }
-.eval-box.next .eval-box-header { color: var(--accent-primary); }
+.eval-box.strengths .eval-box-header {
+  color: #16a34a;
+}
+
+.eval-box.gaps .eval-box-header {
+  color: #d97706;
+}
+
+.eval-box.next .eval-box-header {
+  color: var(--accent-primary);
+}
 
 .eval-list {
   list-style: none;
@@ -1199,8 +1251,15 @@ body {
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(6px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* ==========================================================================
@@ -1224,11 +1283,11 @@ body {
   }
 
   /* Hide web UI chrome, headers, footers & action buttons */
-  .no-print, 
-  .app-header, 
-  .app-footer, 
-  .feedback-actions, 
-  .btn-primary, 
+  .no-print,
+  .app-header,
+  .app-footer,
+  .feedback-actions,
+  .btn-primary,
   .btn-secondary {
     display: none !important;
   }
@@ -1315,9 +1374,17 @@ body {
     margin-bottom: 0.5rem !important;
   }
 
-  .eval-box.strengths { border-left: 4px solid #16a34a !important; }
-  .eval-box.gaps { border-left: 4px solid #d97706 !important; }
-  .eval-box.next { border-left: 4px solid #2563eb !important; }
+  .eval-box.strengths {
+    border-left: 4px solid #16a34a !important;
+  }
+
+  .eval-box.gaps {
+    border-left: 4px solid #d97706 !important;
+  }
+
+  .eval-box.next {
+    border-left: 4px solid #2563eb !important;
+  }
 
   /* Certificate Specific Print Overrides */
   .certificate-card-box {
@@ -1354,11 +1421,11 @@ body {
    ========================================================================== */
 
 .certificate-card-box {
-  background: linear-gradient(135deg, #ffffff, #f8fafc);
-  border: 2px solid #bfdbfe;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
   border-radius: var(--radius-lg);
   padding: 1.5rem;
-  box-shadow: 0 10px 30px -5px rgba(37, 99, 235, 0.12);
+  box-shadow: var(--shadow-card);
   margin-bottom: 1.5rem;
   animation: fadeIn 0.4s ease-out;
 }
@@ -1386,13 +1453,13 @@ body {
 .certificate-emblem {
   width: 52px;
   height: 52px;
-  background: linear-gradient(135deg, #2563eb, #4f46e5);
+  background: #2563eb;
   color: #ffffff;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
+  box-shadow: var(--shadow-soft);
 }
 
 .cert-subtitle {
@@ -1500,8 +1567,41 @@ body {
   .print-only {
     display: block !important;
   }
+
   .certificate-card-box {
     break-inside: avoid !important;
     page-break-after: always !important;
+  }
+}
+
+/* Spinner & Loading Utilities */
+.spinner {
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.75s linear infinite;
+  vertical-align: middle;
+}
+
+.spinner-lg {
+  width: 2rem;
+  height: 2rem;
+  border-width: 3px;
+}
+
+.animate-spin {
+  animation: spin 0.75s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
   }
 }

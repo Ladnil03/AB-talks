@@ -1,16 +1,16 @@
 import React from 'react';
-import { 
-  Sparkles, 
-  ArrowRight, 
-  User, 
-  Brain, 
-  Layers, 
-  Award, 
-  Sliders, 
-  Activity, 
-  CheckCircle2, 
-  FileText, 
-  ShieldCheck 
+import {
+  Sparkles,
+  ArrowRight,
+  User,
+  Brain,
+  Layers,
+  Award,
+  Sliders,
+  Activity,
+  CheckCircle2,
+  FileText,
+  ShieldCheck
 } from 'lucide-react';
 import { CandidateProfile } from '../types/interview';
 
@@ -91,7 +91,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
               style={{
                 padding: '0.95rem 1.85rem',
                 fontSize: '0.95rem',
-                background: 'linear-gradient(135deg, #7c3aed, #2563eb)'
+                background: '#2563eb'
               }}
             >
               <Sparkles size={18} />
@@ -240,7 +240,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
       </section>
 
       {/* 6. Final Conversion Launch Banner (Sixth Fold: Primary Action Callout) */}
-      <section className="setup-card" style={{ textAlign: 'center', background: 'linear-gradient(135deg, #eff6ff, #f8fafc)', border: '1.5px solid #bfdbfe', padding: '3rem 2rem', alignItems: 'center' }}>
+      <section className="setup-card" style={{ textAlign: 'center', background: '#eff6ff', border: '1px solid #bfdbfe', padding: '3rem 2rem', alignItems: 'center' }}>
         <div className="badge-tag" style={{ background: '#ffffff' }}>
           <Sparkles size={14} />
           <span>Automated Assessment Hub</span>

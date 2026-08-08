@@ -6,7 +6,8 @@ import {
   Search,
   ShieldCheck,
   Zap,
-  ArrowLeft
+  ArrowLeft,
+  Loader2
 } from 'lucide-react';
 import { CandidateProfile } from '../types/interview';
 import { fetchCandidates } from '../services/api';
@@ -151,13 +152,17 @@ export const CandidateSelectionPage: React.FC<CandidateSelectionPageProps> = ({
             const initials = getInitials(cand.name);
 
             return (
-              <button
+              <div
                 key={cand.id}
-                type="button"
                 className={`candidate-option-card ${isSelected ? 'selected' : ''}`}
                 onClick={() => onSelectCandidate(cand)}
-                disabled={isLoading}
-                aria-pressed={isSelected}
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    onSelectCandidate(cand);
+                  }
+                }}
               >
                 <div className="candidate-card-top">
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
@@ -180,7 +185,52 @@ export const CandidateSelectionPage: React.FC<CandidateSelectionPageProps> = ({
                   <span className="tag-pill">ID: {cand.id}</span>
                   <span className="tag-pill">Experience Grounded</span>
                 </div>
-              </button>
+
+                {isSelected && (
+                  <div style={{
+                    marginTop: '0.75rem',
+                    paddingTop: '0.75rem',
+                    borderTop: '1px solid #bfdbfe',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    gap: '0.5rem',
+                    flexWrap: 'wrap'
+                  }}>
+                    <span style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--accent-primary)' }}>
+                      Selected Profile
+                    </span>
+
+                    <button
+                      type="button"
+                      className="btn-primary"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onStartSession();
+                      }}
+                      disabled={isLoading}
+                      style={{
+                        padding: '0.5rem 1.1rem',
+                        fontSize: '0.85rem',
+                        background: '#2563eb'
+                      }}
+                    >
+                      {isLoading ? (
+                        <>
+                          <Loader2 size={15} className="animate-spin" />
+                          <span>Starting...</span>
+                        </>
+                      ) : (
+                        <>
+                          <Bot size={15} />
+                          <span>Start Interview Now</span>
+                          <ArrowRight size={15} />
+                        </>
+                      )}
+                    </button>
+                  </div>
+                )}
+              </div>
             );
           })}
         </div>
@@ -207,34 +257,6 @@ export const CandidateSelectionPage: React.FC<CandidateSelectionPageProps> = ({
           </div>
         )}
 
-        {/* Launch Action Footer */}
-        <div className="action-row">
-          <div className="action-hint">
-            <Zap size={16} style={{ color: 'var(--accent-amber)' }} />
-            <span>Ready to evaluate performance for {selectedCandidate.name}</span>
-          </div>
-
-          <button
-            type="button"
-            className="btn-primary"
-            onClick={onStartSession}
-            disabled={isLoading}
-            style={{ padding: '0.9rem 2rem' }}
-          >
-            {isLoading ? (
-              <>
-                <span className="spinner" aria-hidden="true" />
-                <span>Initializing Interview...</span>
-              </>
-            ) : (
-              <>
-                <Bot size={18} />
-                <span>Start Technical Interview</span>
-                <ArrowRight size={18} />
-              </>
-            )}
-          </button>
-        </div>
       </section>
     </div>
   );

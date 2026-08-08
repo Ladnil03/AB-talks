@@ -42,13 +42,11 @@ def mock_evaluate(context: dict[str, Any]) -> dict[str, Any]:
     coverage = sum(1 for w in objective_keywords if w in answer_lower) / max(1, len(objective_keywords))
     word_count = len(answer.split())
 
-    if not answer.strip() or word_count < 8:
+    if not answer.strip() or word_count < 8 or coverage < 0.12:
         depth = "SHALLOW"
-    elif coverage >= 0.35 and word_count >= 45:
+    elif coverage >= 0.35 and word_count >= 30:
         depth = "DEEP"
-    elif word_count >= 45 and coverage >= 0.12:
-        depth = "MEDIUM"
-    elif coverage >= 0.4:
+    elif word_count >= 20 and coverage >= 0.12:
         depth = "MEDIUM"
     else:
         depth = "SHALLOW"
@@ -57,8 +55,8 @@ def mock_evaluate(context: dict[str, Any]) -> dict[str, Any]:
     should_follow_up = depth in ("SHALLOW", "MEDIUM") and follow_up_count < 2
     reasoning = {
         "DEEP": "Answer demonstrated concrete mechanisms, edge cases, and trade-offs.",
-        "MEDIUM": "Answer covered the core idea but missed specific failure modes or trade-offs.",
-        "SHALLOW": "Answer was too high-level and did not explain concrete mechanisms.",
+        "MEDIUM": "Answer covered core concepts but missed specific edge cases or failure modes.",
+        "SHALLOW": "Answer was generic, off-topic, or lacked specific technical mechanism details for this topic.",
     }[depth]
     return {"depth": depth, "should_follow_up": should_follow_up, "reasoning": reasoning}
 
@@ -105,7 +103,7 @@ def mock_feedback(context: dict[str, Any]) -> dict[str, Any]:
         for title in _dedup(gap_titles)
     ]
     if not strengths:
-        strengths = ["Articulated the core concepts discussed during the session."]
+        strengths = ["No major technical strengths demonstrated; candidate responses were brief or lacked architectural detail."]
     if not gaps:
         gaps = ["No major gaps observed; push further into scaling and failure-mode scenarios."]
 
@@ -118,10 +116,16 @@ def mock_feedback(context: dict[str, Any]) -> dict[str, Any]:
             "Practice explaining each mission end-to-end: architecture, trade-offs, and failure modes.",
         ]
 
+    if not strength_titles and gap_titles:
+        performance_desc = "limited, with responses lacking specific technical mechanisms and architectural trade-offs"
+    elif strength_titles and not gap_titles:
+        performance_desc = "strong and well-grounded across all evaluated topics"
+    else:
+        performance_desc = "solid with clear areas for technical growth"
+
     summary = (
         f"The candidate fielded {len(evals)} questions across {len(days)} curriculum days. "
-        f"Answers were generally "
-        f"{'strong and well-grounded' if strength_titles and not gap_titles else 'solid with clear areas for growth'}."
+        f"Overall candidate performance was {performance_desc}."
     )
     return {"summary": summary, "strengths": strengths, "gaps": gaps, "next": next_steps}
 
@@ -174,14 +178,54 @@ def mock_intro(context: dict[str, Any]) -> str:
 
 def mock_followup(context: dict[str, Any]) -> str:
     depth = context.get("depth") or "MEDIUM"
-    if depth == "SHALLOW":
+    title = context.get("title") or "this topic"
+    answer = (context.get("answer") or "").strip().lower()
+    follow_up_count = int(context.get("follow_up_count", 0) or 0)
+
+    # Detect explicit refusal or skip request
+    refusal_keywords = ("nah", "no", "skip", "pass", "not gonna", "dont want", "don't want", "idk", "dont know", "don't know", "whatever")
+    is_refusal = any(k in answer for k in refusal_keywords) or answer in ("no", "nah", "idk", "pass", "skip")
+
+    # Detect single letter or gibberish
+    is_gibberish = len(answer) <= 3 or answer in ("asdf", "test", "xxx", "abc", "xyz")
+
+    if is_refusal:
+        if follow_up_count == 0:
+            return (
+                f"I understand this topic might feel challenging. Let's simplify for {title}: "
+                f"in one brief sentence, what tools or concepts did you work with?"
+            )
         return (
-            "That gives me the outline - could you go one level deeper and walk me through the concrete "
-            "mechanism, the specific implementation details you used, and the failure modes you'd need to handle?"
+            f"Understood, no problem at all. Before we pivot from {title}, "
+            f"is there any high-level aspect of this system you feel comfortable highlighting?"
         )
+
+    if is_gibberish:
+        if follow_up_count == 0:
+            return (
+                f"That response was very brief. To give you full credit for {title}, "
+                f"could you expand on the core architecture and design choices you made?"
+            )
+        return (
+            f"Let me rephrase one last time for {title}: "
+            f"what was the main engineering trade-off or challenge you faced during implementation?"
+        )
+
+    if depth == "SHALLOW":
+        if follow_up_count == 0:
+            return (
+                f"That gives a broad overview of {title}. Could you go one level deeper into the specific "
+                f"mechanisms and implementation details you used?"
+            )
+        return (
+            f"Thanks for clarifying. To round out {title}, what failure modes or edge cases did you encounter, "
+            f"and how did you recover in production?"
+        )
+
+    # MEDIUM depth
     return (
-        "Good. Can you walk me through the trade-offs and edge cases you considered in more depth - "
-        "what would actually break at scale, and how would you recover?"
+        f"Good start on {title}. Can you walk me through the trade-offs and scale considerations in more depth - "
+        f"what would actually break under heavy load, and how would you handle it?"
     )
 
 
@@ -292,11 +336,12 @@ class LLMClient:
             "model": os.getenv("GROQ_MODEL", DEFAULT_GROQ_MODEL),
             "messages": [{"role": "user", "content": prompt}],
             "temperature": temperature,
+            "stream": False,
         }
         if schema is not None:
             kwargs["response_format"] = {"type": "json_object"}
         response = client.chat.completions.create(**kwargs)
-        text = (response.choices[0].message.content or "").strip()
+        text = self._extract_text_from_response(response)
         if schema is None:
             return text
         return self._parse_json(text) or text
@@ -312,7 +357,7 @@ class LLMClient:
             system="You are the AI Interview Agent, a rigorous but conversational technical interviewer.",
             messages=[{"role": "user", "content": prompt}],
         )
-        text = "".join(b.text for b in response.content if getattr(b, "type", "") == "text").strip()
+        text = "".join(getattr(b, "text", "") for b in response.content if getattr(b, "type", "") == "text").strip()
         if schema is None:
             return text
         return self._parse_json(text) or text
@@ -325,14 +370,27 @@ class LLMClient:
             "model": os.getenv("OPENAI_MODEL", DEFAULT_OPENAI_MODEL),
             "messages": [{"role": "user", "content": prompt}],
             "temperature": temperature,
+            "stream": False,
         }
         if schema is not None:
             kwargs["response_format"] = {"type": "json_object"}
         response = client.chat.completions.create(**kwargs)
-        text = (response.choices[0].message.content or "").strip()
+        text = self._extract_text_from_response(response)
         if schema is None:
             return text
         return self._parse_json(text) or text
+
+    def _extract_text_from_response(self, response: Any) -> str:
+        if hasattr(response, "choices"):
+            return (response.choices[0].message.content or "").strip()
+        chunks: list[str] = []
+        for chunk in response:
+            if hasattr(chunk, "choices") and chunk.choices:
+                delta = chunk.choices[0].delta
+                content = getattr(delta, "content", None)
+                if content:
+                    chunks.append(content)
+        return "".join(chunks).strip()
 
     def _parse_json(self, text: str) -> dict[str, Any] | None:
         return parse_json(text)

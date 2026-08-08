@@ -1,15 +1,16 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { 
-  Send, 
-  Bot, 
-  User, 
-  Clock, 
+import {
+  Send,
+  Bot,
+  User,
+  Clock,
   Zap,
   Sparkles,
   Pause,
   Play,
   FastForward,
-  XCircle
+  XCircle,
+  Loader2
 } from 'lucide-react';
 import { ChatMessage, CandidateProfile } from '../types/interview';
 
@@ -69,9 +70,9 @@ const getDynamicQuickPrompts = (messages: ChatMessage[], selectedCandidate?: Can
   return Array.from(new Set(dynamicPrompts)).slice(0, 4);
 };
 
-export const InterviewRoom: React.FC<InterviewRoomProps> = ({ 
-  messages, 
-  onSendMessage, 
+export const InterviewRoom: React.FC<InterviewRoomProps> = ({
+  messages,
+  onSendMessage,
   isLoading,
   selectedCandidate,
   isDemoMode = false,
@@ -146,8 +147,9 @@ export const InterviewRoom: React.FC<InterviewRoomProps> = ({
       {isDemoMode && (
         <div style={{
           gridColumn: '1 / -1',
-          background: 'linear-gradient(135deg, #1e1b4b, #312e81)',
-          color: '#ffffff',
+          background: '#eff6ff',
+          color: '#1e3a8a',
+          border: '1px solid #bfdbfe',
           padding: '0.75rem 1.25rem',
           borderRadius: '12px',
           display: 'flex',
@@ -155,11 +157,11 @@ export const InterviewRoom: React.FC<InterviewRoomProps> = ({
           alignItems: 'center',
           flexWrap: 'wrap',
           gap: '0.75rem',
-          boxShadow: '0 8px 25px rgba(49, 46, 129, 0.35)',
+          boxShadow: '0 2px 8px rgba(37, 99, 235, 0.08)',
           marginBottom: '0.5rem'
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
-            <Sparkles size={18} style={{ color: '#fbbf24' }} />
+            <Sparkles size={18} style={{ color: '#d97706' }} />
             <span style={{ fontWeight: 700, fontSize: '0.9rem' }}>
               Hackathon Pitch Mode: Playing Turn {demoStepIndex} of {totalDemoSteps}
             </span>
@@ -171,7 +173,7 @@ export const InterviewRoom: React.FC<InterviewRoomProps> = ({
                 type="button"
                 className="btn-secondary"
                 onClick={onTogglePauseDemo}
-                style={{ padding: '0.35rem 0.85rem', fontSize: '0.8rem', background: '#ffffff', color: '#1e1b4b', border: 'none' }}
+                style={{ padding: '0.35rem 0.85rem', fontSize: '0.8rem', background: '#ffffff', color: '#1e3a8a', border: '1px solid #cbd5e1' }}
               >
                 {isDemoPaused ? <Play size={13} /> : <Pause size={13} />}
                 <span>{isDemoPaused ? 'Resume' : 'Pause'}</span>
@@ -183,7 +185,7 @@ export const InterviewRoom: React.FC<InterviewRoomProps> = ({
                 type="button"
                 className="btn-primary"
                 onClick={onFastForwardDemo}
-                style={{ padding: '0.35rem 0.85rem', fontSize: '0.8rem', background: 'linear-gradient(135deg, #0284c7, #2563eb)' }}
+                style={{ padding: '0.35rem 0.85rem', fontSize: '0.8rem', background: '#2563eb' }}
               >
                 <FastForward size={13} />
                 <span>Fast-Forward to Feedback Report</span>
@@ -194,7 +196,7 @@ export const InterviewRoom: React.FC<InterviewRoomProps> = ({
               <button
                 type="button"
                 onClick={onExitDemo}
-                style={{ background: 'transparent', border: 'none', color: '#cbd5e1', cursor: 'pointer', display: 'flex', alignItems: 'center' }}
+                style={{ background: 'transparent', border: 'none', color: '#64748b', cursor: 'pointer', display: 'flex', alignItems: 'center' }}
                 title="Exit Pitch Demo Mode"
               >
                 <XCircle size={18} />
@@ -262,6 +264,35 @@ export const InterviewRoom: React.FC<InterviewRoomProps> = ({
 
       {/* Main Conversation Stream */}
       <div className="chat-window">
+        {/* Top Question Progress Header */}
+        <div className="interview-top-bar" style={{
+          padding: '0.75rem 1.25rem',
+          borderBottom: '1px solid #e2e8f0',
+          background: '#ffffff',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          flexWrap: 'wrap',
+          gap: '0.5rem'
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+            <span style={{
+              background: '#e0e7ff',
+              color: '#3730a3',
+              padding: '0.25rem 0.75rem',
+              borderRadius: '999px',
+              fontWeight: 700,
+              fontSize: '0.82rem',
+              letterSpacing: '0.03em'
+            }}>
+              Question {Math.max(1, [...messages].reverse().find(m => m.role === 'agent' && m.questionNumber !== undefined)?.questionNumber ?? 1)}
+            </span>
+            <span style={{ color: '#64748b', fontSize: '0.85rem' }}>
+              Min 8 scenario questions across &ge;4 curriculum days
+            </span>
+          </div>
+        </div>
+
         <div className="messages-list">
           {messages.map((m) => {
             const isAgent = m.role === 'agent';
@@ -304,9 +335,10 @@ export const InterviewRoom: React.FC<InterviewRoomProps> = ({
                 <Bot size={20} />
               </div>
               <div className="msg-bubble-content">
-                <div className="msg-header">
+                <div className="msg-header" style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
                   <span className="msg-sender-name">AI Interviewer</span>
-                  <span>Analyzing response...</span>
+                  <Loader2 size={13} className="animate-spin" style={{ color: '#2563eb' }} />
+                  <span style={{ fontSize: '0.8rem', color: '#2563eb', fontWeight: 600 }}>Analyzing response & synthesizing next question...</span>
                 </div>
                 <div className="typing-indicator">
                   <div className="typing-dot" />
@@ -337,8 +369,17 @@ export const InterviewRoom: React.FC<InterviewRoomProps> = ({
             className="send-btn"
             disabled={isLoading || isDemoMode || !input.trim()}
           >
-            <span>Send</span>
-            <Send size={16} />
+            {isLoading ? (
+              <>
+                <Loader2 size={16} className="animate-spin" />
+                <span>Sending...</span>
+              </>
+            ) : (
+              <>
+                <span>Send</span>
+                <Send size={16} />
+              </>
+            )}
           </button>
         </form>
       </div>
