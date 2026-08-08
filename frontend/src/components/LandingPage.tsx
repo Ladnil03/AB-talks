@@ -67,13 +67,13 @@ export const LandingPage: React.FC<LandingPageProps> = ({
         </h1>
 
         <p className="hero-subtitle">
-          Conduct adaptive, multi-turn technical interviews grounded in real-world candidate experience. 
+          Conduct adaptive, multi-turn technical interviews grounded in real-world candidate experience.
           Dynamically probes architectural trade-offs, evaluates system design depth, and generates structured feedback reports.
         </p>
 
         <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', justifyContent: 'center', marginTop: '0.5rem' }}>
-          <button 
-            type="button" 
+          <button
+            type="button"
             className="btn-primary"
             onClick={onGoToCandidateHub}
             style={{ padding: '0.95rem 2rem', fontSize: '1rem' }}
@@ -84,12 +84,12 @@ export const LandingPage: React.FC<LandingPageProps> = ({
           </button>
 
           {onLaunchDemo && (
-            <button 
-              type="button" 
+            <button
+              type="button"
               className="btn-primary"
               onClick={onLaunchDemo}
-              style={{ 
-                padding: '0.95rem 1.85rem', 
+              style={{
+                padding: '0.95rem 1.85rem',
                 fontSize: '0.95rem',
                 background: 'linear-gradient(135deg, #7c3aed, #2563eb)'
               }}
@@ -99,8 +99,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({
             </button>
           )}
 
-          <button 
-            type="button" 
+          <button
+            type="button"
             className="btn-secondary"
             onClick={() => scrollToSection('how-it-works-section')}
             style={{ padding: '0.95rem 1.6rem', fontSize: '0.95rem' }}
