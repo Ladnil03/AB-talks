@@ -1,16 +1,16 @@
 import React from 'react';
-import { 
-  Sparkles, 
-  ArrowRight, 
-  User, 
-  Brain, 
-  Layers, 
-  Award, 
-  Sliders, 
-  Activity, 
-  CheckCircle2, 
-  FileText, 
-  ShieldCheck 
+import {
+  Sparkles,
+  ArrowRight,
+  User,
+  Brain,
+  Layers,
+  Award,
+  Sliders,
+  Activity,
+  CheckCircle2,
+  FileText,
+  ShieldCheck
 } from 'lucide-react';
 import { CandidateProfile } from '../types/interview';
 
