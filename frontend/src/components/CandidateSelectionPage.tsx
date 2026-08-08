@@ -5,7 +5,6 @@ import {
   ArrowRight,
   Search,
   ShieldCheck,
-  Zap,
   ArrowLeft,
   Loader2
 } from 'lucide-react';

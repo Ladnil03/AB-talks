@@ -1,36 +1,17 @@
 import React, { useEffect, useRef, useState } from 'react';
 import {
-  Layers,
-  Cpu,
-  Brain,
-  Database,
   FileCheck,
-  Bot,
   User,
-  ArrowRight,
   ShieldCheck,
-  Zap,
-  Activity,
-  Code2,
-  Terminal,
-  Github,
-  Linkedin,
-  Globe,
   Sparkles,
   CheckCircle2,
-  Sliders,
-  Box,
   Eye,
   GitBranch,
-  RotateCcw,
-  Maximize2,
-  Server,
   Network,
   Play,
   Pause,
   ChevronRight,
-  ChevronLeft,
-  ArrowDown
+  ChevronLeft
 } from 'lucide-react';
 import robinImg from '../assets/robin.jpeg';
 import beastBoyImg from '../assets/beast boy!!.jpeg';
